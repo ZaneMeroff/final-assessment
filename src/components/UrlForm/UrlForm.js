@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { setUrls } from '../../actions';
 
-class UrlForm extends Component {
-  constructor(props) {
+export class UrlForm extends Component {
+  constructor() {
     super();
-    this.props = props;
     this.state = {
       title: '',
       urlToShorten: ''
@@ -19,11 +18,28 @@ class UrlForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.setUrls(this.state.urlToShorten)
+    this.makeFetchRequest(this.state.urlToShorten, this.state.title)
     this.clearInputs();
   }
 
   clearInputs = () => {
     this.setState({title: '', urlToShorten: ''});
+  }
+
+  makeFetchRequest = (urlToShorten, title) => {
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({long_url: urlToShorten, title: title}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+     fetch('http://localhost:3001/api/v1/urls', options)
+      .then(res => {
+        if(!res.ok) {
+          throw Error('There was an error!')
+        }
+        return res.json()})
   }
 
   render() {
@@ -36,7 +52,6 @@ class UrlForm extends Component {
           value={this.state.title}
           onChange={e => this.handleNameChange(e)}
         />
-
         <input
           type='text'
           placeholder='URL to Shorten...'
@@ -44,7 +59,6 @@ class UrlForm extends Component {
           value={this.state.urlToShorten}
           onChange={e => this.handleNameChange(e)}
         />
-
         <button onClick={e => this.handleSubmit(e)}>
           Shorten Please!
         </button>
