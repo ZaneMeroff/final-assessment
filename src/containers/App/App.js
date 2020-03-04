@@ -26,7 +26,7 @@ export class App extends Component {
           <UrlForm />
         </header>
 
-        <UrlContainer urls={this.props.urls}/>
+        <UrlContainer />
       </main>
     );
   }
