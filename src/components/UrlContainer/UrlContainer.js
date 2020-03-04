@@ -1,7 +1,9 @@
 import React from 'react';
 import './UrlContainer.css';
+import { connect } from 'react-redux';
+import { setUrls } from '../../actions';
 
-const UrlContainer = props => {
+export const UrlContainer = (props) => {
   const urlEls = props.urls.map(url => {
     return (
       <div className="url">
@@ -19,4 +21,8 @@ const UrlContainer = props => {
   )
 }
 
-export default UrlContainer;
+export const mapStateToProps = ({ urls }) => ({
+  urls
+});
+
+export default connect(mapStateToProps)(UrlContainer);
