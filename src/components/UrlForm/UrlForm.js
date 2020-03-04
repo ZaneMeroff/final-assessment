@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setUrls } from '../../actions';
+import { setUrls, addUrls } from '../../actions';
 
 export class UrlForm extends Component {
   constructor() {
@@ -17,8 +17,8 @@ export class UrlForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.setUrls(this.state.urlToShorten)
     this.makeFetchRequest(this.state.urlToShorten, this.state.title)
+      .then(res => this.props.addUrls(res))
     this.clearInputs();
   }
 
@@ -34,7 +34,7 @@ export class UrlForm extends Component {
         'Content-Type': 'application/json'
       }
     }
-     fetch('http://localhost:3001/api/v1/urls', options)
+    return fetch('http://localhost:3001/api/v1/urls', options)
       .then(res => {
         if(!res.ok) {
           throw Error('There was an error!')
@@ -69,7 +69,8 @@ export class UrlForm extends Component {
 
 export const mapDispatchToProps = dispatch => {
   return {
-    setUrls: urls => dispatch(setUrls(urls))
+    setUrls: urls => dispatch(setUrls(urls)),
+    addUrls: urls => dispatch(addUrls(urls))
   }
 };
 

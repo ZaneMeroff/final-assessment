@@ -13,7 +13,7 @@ export class UrlContainer extends Component {
   }
 
   render() {
-
+console.log(this.props.urls)
     const urlEls = this.props.urls.map(url => {
       return (
         <div className="url">
